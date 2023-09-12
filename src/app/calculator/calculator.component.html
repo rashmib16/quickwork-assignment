@@ -1,0 +1,93 @@
+<div class="drop-box-container">
+  <div
+    cdkDropList
+    #initialNumberList="cdkDropList"
+    [cdkDropListData]="initialNumbers"
+    [cdkDropListConnectedTo]="[operandOneList, operandTwoList]"
+    class="drop-box-list initial-number-list"
+    (cdkDropListDropped)="drop($event)"
+  >
+    <div
+      class="number-box"
+      *ngFor="let item of initialNumbers"
+      [cdkDragData]="item"
+      cdkDrag
+    >
+      {{ item }}
+    </div>
+  </div>
+</div>
+
+<div class="drop-box-container">
+  <div class="drop-list-container">
+    <div class="drop-list-placeholder" *ngIf="number1.length === 0">
+      Drop the numbers here
+    </div>
+    <div
+      cdkDropList
+      #operandOneList="cdkDropList"
+      [cdkDropListData]="number1"
+      [cdkDropListConnectedTo]="[initialNumberList, operandTwoList]"
+      class="drop-box-list operand-list"
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div
+        class="number-box"
+        *ngFor="let item of number1"
+        [cdkDragData]="item"
+        cdkDrag
+      >
+        {{ item }}
+      </div>
+    </div>
+  </div>
+
+  <ng-select
+    style="margin-top: 40px"
+    [(ngModel)]="operationSelected"
+    class="custom-select"
+    [searchable]="false"
+    placeholder="Select Operation"
+  >
+    <ng-option
+      *ngFor="let operation of arthimeticOperations"
+      [value]="operation"
+      >{{ operation | titlecase }}</ng-option
+    >
+  </ng-select>
+
+  <div class="drop-list-container">
+    <div class="drop-list-placeholder" *ngIf="number2.length === 0">
+      Drop the numbers here
+    </div>
+    <div
+      style="margin-top: 40px"
+      cdkDropList
+      #operandTwoList="cdkDropList"
+      cdkDropListOrientation="horizontal"
+      [cdkDropListData]="number2"
+      [cdkDropListConnectedTo]="[initialNumberList, operandOneList]"
+      class="drop-box-list operand-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div
+        class="number-box"
+        *ngFor="let item of number2"
+        [cdkDragData]="item"
+        cdkDrag
+      >
+        {{ item }}
+      </div>
+    </div>
+  </div>
+
+  <div class="result-container">
+    <button (click)="calculate()" class="custom-button">Calculate</button>
+
+    <div class="result">
+      <ng-container *ngIf="result !== null">{{ result | number }}</ng-container>
+    </div>
+  </div>
+  <div class="error">{{ error }}</div>
+</div>
